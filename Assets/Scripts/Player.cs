@@ -17,12 +17,20 @@ public class Player : MonoBehaviour
     private float timeBtwShots;
     public float startTimeBtwShot;
 
-    public static float health = 100;
+    public static float currentHealth;
+    public static float maxHealth = 100;
 
+    public static int pistolammomag = 7;
+    public static int maxpistolammo = 7;
+    public static int inventorypistolammo = 21;
+
+    public HealthBar healthBar;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     void Update()
@@ -39,18 +47,26 @@ public class Player : MonoBehaviour
             //Shooting
             if (timeBtwShots <= 0)
             {
-                if (Input.GetMouseButton(0))
+                if (Input.GetMouseButtonDown(0) && pistolammomag != 0)
                 {
                     Instantiate(bullet, shotPoint.position, transform.rotation);
-                    timeBtwShots = startTimeBtwShot;
-                }
+                    timeBtwShots = startTimeBtwShot * 2;
+                    pistolammomag--;
+                    Debug.Log(pistolammomag);
+                }   
             }
             else
             {
                 timeBtwShots -= Time.deltaTime;
             }
         }
-        if (health <= 0)
+        //reload
+        if (Input.GetKeyDown(KeyCode.R) && inventorypistolammo > 0)
+        {
+            Invoke("reload", 2);
+        }
+        //dead
+        if (currentHealth <= 0)
         {
             Destroy(gameObject);
         }
@@ -66,8 +82,15 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            health = health - Enemy.damageE1;
-            Debug.Log(health);
+            currentHealth = currentHealth - Enemy.damageE1;
+            healthBar.SetHealth(currentHealth);
         }
+    }
+
+    void reload()
+    {
+        inventorypistolammo -= maxpistolammo - pistolammomag;
+        pistolammomag = maxpistolammo;
+        Debug.Log(pistolammomag +" "+ inventorypistolammo);
     }
 }

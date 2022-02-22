@@ -33,7 +33,7 @@ public class Pause : MonoBehaviour
                 Panel.SetActive(false);
             }    
         }
-        if (Player.health == 0)
+        if (Player.currentHealth == 0)
         {
             paused = true;
             Time.timeScale = 0;
@@ -46,7 +46,7 @@ public class Pause : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
         paused = false;
         Time.timeScale = 1;
-        Player.health = 100;
+        Player.currentHealth = Player.maxHealth;
         Instantiate(player);
     }
 
