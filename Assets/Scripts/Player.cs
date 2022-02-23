@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        pistolammomag = maxpistolammo; // Switch on save atribute
+        inventorypistolammo = 21; // Switch on save atribute
     }
 
     void Update()
