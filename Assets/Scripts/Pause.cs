@@ -53,6 +53,8 @@ public class Pause : MonoBehaviour
     public void inMenu()
     {
         SceneManager.LoadScene("MainMenu");
+        Time.timeScale = 1;
+        paused = false;
     }
 
     public void inWindows()
