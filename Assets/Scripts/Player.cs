@@ -5,7 +5,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed;
+    private float speed;
+    public float energy;
+    public float stamina;
+    public float maxstamina = 100;
+    public float runSpeed;
+    public float regSpeed;
     public float offset;
 
     private Rigidbody2D rb;
@@ -20,19 +25,25 @@ public class Player : MonoBehaviour
     public static float currentHealth;
     public static float maxHealth = 100;
 
+    public static int money = 0;
+
     public static int pistolammomag = 7;
     public static int maxpistolammo = 7;
     public static int inventorypistolammo = 21;
 
     public HealthBar healthBar;
+    public StaminaBar staminaBar;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
+        stamina = maxstamina;
         healthBar.SetMaxHealth(maxHealth);
+        staminaBar.SetMaxStamina(maxstamina);
         pistolammomag = maxpistolammo; // Switch on save atribute
         inventorypistolammo = 21; // Switch on save atribute
+        speed = regSpeed;
     }
 
     void Update()
@@ -61,6 +72,31 @@ public class Player : MonoBehaviour
             {
                 timeBtwShots -= Time.deltaTime;
             }
+            //Shift - run
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                if (stamina > 0)
+                {
+                    speed = runSpeed;
+                    stamina -= energy;
+                    staminaBar.SetStamina(stamina);
+                }
+                else
+                {
+                    speed = regSpeed;
+                    StartCoroutine("energyCharge", 8f);
+                    staminaBar.SetStamina(stamina);
+                }
+            }
+            else
+            {
+                speed = regSpeed;
+                if (stamina < 100)
+                {
+                    StartCoroutine("energyCharge", 8f);
+                }
+            }
+            Debug.Log("Стамина: " + stamina + " Скорость: " + speed);
         }
         //reload
         if (Input.GetKeyDown(KeyCode.R) && inventorypistolammo > 0)
@@ -94,5 +130,12 @@ public class Player : MonoBehaviour
         inventorypistolammo -= maxpistolammo - pistolammomag;
         pistolammomag = maxpistolammo;
         Debug.Log(pistolammomag +" "+ inventorypistolammo);
+    }
+
+    IEnumerator energyCharge()
+    {
+        stamina += energy * (12 / 10);
+        staminaBar.SetStamina(stamina);
+        return null;
     }
 }
