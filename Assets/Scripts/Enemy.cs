@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
         if (health <=0)
         {
             Destroy(gameObject);
-            Player.money += 50;
+            Player.money += 1000;
         }
     }
 
