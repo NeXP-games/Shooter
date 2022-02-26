@@ -10,6 +10,7 @@ public class Pause : MonoBehaviour
     public GameObject Panel;
     public GameObject PanelDead;
     public GameObject player;
+    public GameObject panelMAG;
 
     void Start()
     {
@@ -38,6 +39,16 @@ public class Pause : MonoBehaviour
             paused = true;
             Time.timeScale = 0;
             PanelDead.SetActive(true);
+        }
+        if (Magazine.magazine)
+        {
+            paused = true;
+            Time.timeScale = 0;
+        }
+        else
+        {
+            paused = false;
+            Time.timeScale = 1;
         }
     }
 
